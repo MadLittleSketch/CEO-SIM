@@ -8,7 +8,6 @@
     <style>
         body { background: #0e0e0e; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; overflow: hidden; font-family: 'Courier New', Courier, monospace; touch-action: manipulation; }
         
-        /* Fixed Aspect Ratio Container that scales for Mobile */
         .game-viewport { 
             position: relative; 
             width: 100vw; 
@@ -25,24 +24,29 @@
         
         #monitor-content { 
             position: absolute; top: 23%; left: 20%; width: 51%; height: 38%; 
-            display: flex; flex-direction: column; padding: 2.5%; 
+            display: flex; flex-direction: column; padding: 2% 3%; 
             color: #33ff33; text-shadow: 0 0 5px #33ff33; 
-            font-size: 1.2vh; overflow: hidden; transition: all 0.3s ease; background: #000; 
+            font-size: 1.1vh; overflow: hidden; transition: all 0.3s ease; background: #000; 
         }
 
         @keyframes stress-flicker { 0% { opacity: 1; filter: brightness(1); } 5% { opacity: 0.8; filter: brightness(1.2); } 15% { opacity: 0.9; filter: contrast(1.5); } 100% { opacity: 1; } }
         .high-stress { animation: stress-flicker 0.2s infinite; }
 
-        /* Mobile-Optimized Action Grid */
-        .action-grid { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; pointer-events: auto; }
+        .action-grid { 
+            margin-top: auto; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 4px; 
+            pointer-events: auto;
+            padding-top: 5px;
+        }
         
-        /* Larger touch targets (min 48px) */
         .pixel-btn { 
             background: #172227; border: 1px solid #33ff33; color: #33ff33; 
-            padding: 12px 5px; /* Increased padding for mobile touch */
-            font-size: 1.1vh; font-weight: bold; text-transform: uppercase; 
+            padding: 8px 2px;
+            font-size: 1vh; font-weight: bold; text-transform: uppercase; 
             cursor: pointer; transition: background 0.2s; 
-            min-height: 48px; /* PRD Requirement */
+            min-height: 38px; 
         }
         .pixel-btn:hover { background: #33ff33; color: #172227; }
 
@@ -50,17 +54,16 @@
         .fill { height: 100%; transition: width 0.4s ease; }
         .hidden { display: none !important; }
         
-        /* Leaderboard styling */
-        .leaderboard { font-size: 0.9vh; line-height: 1.3; border: 1px solid #33ff33; padding: 4px; margin-top: 5px; }
+        .leaderboard { font-size: 0.8vh; line-height: 1.2; border: 1px solid #33ff33; padding: 4px; margin-top: 5px; }
         
         @media (max-width: 600px) {
-            #monitor-content { font-size: 1.1vh; }
-            .pixel-btn { font-size: 1vh; padding: 8px 2px; }
+            #monitor-content { font-size: 1.0vh; padding: 1.5% 2%; }
+            .pixel-btn { font-size: 0.9vh; min-height: 35px; }
         }
     </style>
 </head>
 <body>
-    <div id="canvas" class="game-viewport" style="background-image: url('start.png');">
+    <div id="canvas" class="game-viewport" style="background-image: url('start.jpg');">
         <div id="start-hotspot" onclick="launchGame()"></div>
         <div id="game-ui" class="hidden">
             <div class="stat-bar" style="left: 4.8%; width: 22.3%;"><div id="bar-t" class="fill bg-cyan-500" style="width: 70%;"></div></div>
@@ -69,13 +72,13 @@
             
             <div id="monitor-content">
                 <div id="active-game-screen" class="flex flex-col h-full">
-                    <div style="border-bottom: 2px solid #33ff33; display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 2px;">
-                        <span style="font-weight: bold; font-size: 0.9vh;">MAIL_SYS.EXE <button id="audio-toggle" class="px-1 border border-[#33ff33]" onclick="toggleMusic()">🔊</button></span>
+                    <div style="border-bottom: 2px solid #33ff33; display: flex; justify-content: space-between; margin-bottom: 5px; padding-bottom: 2px; font-size: 0.8vh;">
+                        <span style="font-weight: bold;">MAIL_SYS.EXE <button id="audio-toggle" class="px-1 border border-[#33ff33]" onclick="toggleMusic()">🔊</button></span>
                         <span id="clock" style="font-weight: bold;">03:00</span>
                     </div>
-                    <div style="flex-grow: 1; overflow-y: auto;">
-                        <p id="sender" style="font-weight: bold; margin-bottom: 4px; font-size: 1.2vh; text-decoration: underline;">FROM: ADMIN</p>
-                        <p id="msg" style="line-height: 1.4; font-size: 1.2vh;">Awaiting leadership directive...</p>
+                    <div id="email-text-area" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; justify-content: center; min-height: 0; padding: 5px 0;">
+                        <p id="sender" style="font-weight: bold; margin-bottom: 2px; font-size: 1.1vh; text-decoration: underline;">FROM: ADMIN</p>
+                        <p id="msg" style="line-height: 1.3; font-size: 1.1vh; white-space: pre-wrap;">Awaiting leadership directive...</p>
                     </div>
                     <div class="action-grid">
                         <button class="pixel-btn" onclick="takeAction('handle')">Handle</button>
@@ -86,14 +89,13 @@
                 </div>
 
                 <div id="leaderboard-screen" class="hidden flex flex-col items-center h-full text-center py-1">
-                    <h2 style="font-size: 2vh; font-weight: bold; color: #ff3333;">GAME OVER</h2>
-                    <p id="end-reason" style="font-size: 1vh; margin-bottom: 5px;"></p>
+                    <h2 style="font-size: 1.8vh; font-weight: bold; color: #ff3333;">GAME OVER</h2>
+                    <p id="end-reason" style="font-size: 0.9vh; margin-bottom: 5px;"></p>
                     <div class="leaderboard w-full">
-                        <div class="flex justify-between border-b border-[#33ff33] mb-1 font-bold"><span>RANK</span><span>NAME</span><span>SCORE</span></div>
+                        <div class="flex justify-between border-b border-[#33ff33] mb-1 font-bold uppercase"><span>RANK</span><span>NAME</span><span>SCORE</span></div>
                         <div class="flex justify-between"><span>01</span><span>JACK_W</span><span>99820</span></div>
                         <div class="flex justify-between text-black bg-[#33ff33]"><span>02</span><span>YOU</span><span id="player-score">0</span></div>
                         <div class="flex justify-between"><span>03</span><span>ELON_M</span><span>85400</span></div>
-                        <div class="flex justify-between text-[0.7vh]"><span>04</span><span>MARK_Z</span><span>42100</span></div>
                     </div>
                     <button onclick="location.reload()" class="pixel-btn w-full mt-2">REBOOT</button>
                 </div>
@@ -102,19 +104,21 @@
     </div>
 
     <script>
-        let stats = { trust: 70, biz: 60, str: 30, time: 180 }; // 3 Minutes [cite: 8]
+        // Game State [cite: 52, 54]
+        let stats = { trust: 70, biz: 60, str: 30, time: 180 }; 
         let msgTimer, ticker, audioCtx, musicInterval;
         let activeMessage = false;
         let musicPlaying = false;
 
         const scenarios = [
-            { s: "V.P. PRODUCT", t: "The API Security module for Thales is failing tests. Delay the release?" },
-            { s: "CFO", t: "Operating costs in Kfar Saba are spiking. Approve office downsizing?" },
-            { s: "HR DIRECTOR", t: "The engineering team is at 90% burnout. They need a mandatory day off." },
-            { s: "BOARD CHAIR", t: "The board expects a 5-year growth plan by EOD. Handle this?" },
-            { s: "LEGAL", t: "Patent dispute in the API security stack. Settle for $20k or fight it?" }
+            { s: "V.P. PRODUCT", t: "The API Security module for Thales is failing tests. Delay release?" },
+            { s: "CFO", t: "Operating costs in Kfar Saba spiking. Approve immediate downsizing?" },
+            { s: "HR DIRECTOR", t: "Engineering team at 90% burnout. Need mandatory day off." },
+            { s: "BOARD CHAIR", t: "Board expects 5-year growth plan by EOD. Handle personally?" },
+            { s: "LEGAL", t: "Patent dispute in the security stack. Settle for $20k or fight?" }
         ];
 
+        // --- 80s Synth Engine ---
         function playNote(freq, type, duration, vol = 0.1) {
             if (!audioCtx) return;
             const osc = audioCtx.createOscillator();
@@ -143,8 +147,9 @@
             }
         }
 
+        // --- Game Loop ---
         function launchGame() {
-            document.getElementById('canvas').style.backgroundImage = "url('game.png')";
+            document.getElementById('canvas').style.backgroundImage = "url('game.jpg')";
             document.getElementById('start-hotspot').classList.add('hidden');
             document.getElementById('game-ui').classList.remove('hidden');
             queueNextMessage();
@@ -154,6 +159,7 @@
                 const s = stats.time % 60;
                 document.getElementById('clock').innerText = `${m}:${s < 10 ? '0'+s : s}`;
                 
+                // Last minute stress logic [cite: 59]
                 const monitor = document.getElementById('monitor-content');
                 if (stats.time <= 60) monitor.classList.add('high-stress');
                 else monitor.classList.remove('high-stress');
@@ -163,9 +169,11 @@
         }
 
         function queueNextMessage() {
-            if (activeMessage) applyImpact('defer'); // Unanswered = Defer
+            // Unaddressed emails treat as Defer
+            if (activeMessage) applyImpact('defer');
             drawMail();
             activeMessage = true; 
+            // Increasing frequency logic [cite: 55]
             let delay = (stats.time < 60) ? 3000 : (stats.time < 120) ? 5000 : 8000;  
             clearTimeout(msgTimer);
             msgTimer = setTimeout(queueNextMessage, delay);
@@ -186,12 +194,14 @@
         }
 
         function applyImpact(type) {
+            // Impact Table [cite: 48]
             if (type === 'handle') { stats.str += 12; stats.biz += 15; stats.trust += 5; }
             else if (type === 'delegate') { stats.str -= 5; stats.trust -= 10; }
             else if (type === 'defer') { stats.str -= 3; stats.biz -= 12; }
             else if (type === 'ignore') { stats.str -= 8; stats.trust -= 15; stats.biz -= 15; }
 
             updateUI();
+            // Terminating Conditions
             if (stats.str >= 100) terminateSession("CEO BURNOUT");
             else if (stats.biz <= 0) terminateSession("BANKRUPTCY");
             else if (stats.trust <= 0) terminateSession("MUTINY");
